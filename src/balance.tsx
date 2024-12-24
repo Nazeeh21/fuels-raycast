@@ -17,15 +17,15 @@ export default function Command() {
   const { pop } = useNavigation();
 
   const baseAssetId = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07";
-  
+
   const fetchBalance = async (address: string) => {
     try {
       setIsLoading(true);
-      
+
       const response = await fetch(getFuelUrl("testnet"), {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           query: BALANCE_QUERY,
@@ -55,13 +55,16 @@ export default function Command() {
     }
 
     const formatBalance = (balanceData: BalanceItem[]) => {
-      return balanceData.map(item => {
-        const amount = Number(item.amount) / 1e9;
-        const isBaseAsset = item.assetId.toLowerCase() === baseAssetId.toLowerCase();
-        return `
-- **Amount:** ${amount.toLocaleString(undefined, { minimumFractionDigits: 9, maximumFractionDigits: 9 })}${isBaseAsset ? ' ETH' : ''}
+      return balanceData
+        .map((item) => {
+          const amount = Number(item.amount) / 1e9;
+          const isBaseAsset = item.assetId.toLowerCase() === baseAssetId.toLowerCase();
+          return `
+- **Amount:** ${amount.toLocaleString(undefined, { minimumFractionDigits: 9, maximumFractionDigits: 9 })}${isBaseAsset ? " ETH" : ""}
   **Asset ID:** \`${item.assetId}\`
-`}).join('\n');
+`;
+        })
+        .join("\n");
     };
 
     return `
@@ -69,7 +72,7 @@ export default function Command() {
 
 **Address:** \`${address}\`
 
-${isLoading ? "Loading..." : (balance ? formatBalance(JSON.parse(balance)) : "No balance found")}
+${isLoading ? "Loading..." : balance ? formatBalance(JSON.parse(balance)) : "No balance found"}
     `;
   };
 
