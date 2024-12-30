@@ -1,6 +1,12 @@
-import { ActionPanel, Action, List, Form, showToast, Toast } from "@raycast/api";
-import { FuelAgent } from 'fuel-agent-kit';
+import { ActionPanel, Action, List, Form, showToast, Toast, getPreferenceValues } from "@raycast/api";
+import { FuelAgent } from "fuel-agent-kit";
 import { useState } from "react";
+import nodeFetch from 'node-fetch';
+
+// Polyfill fetch
+if (!global.fetch) {
+  (global as unknown as any).fetch = nodeFetch;
+}
 
 interface Operation {
   title: string;
@@ -10,7 +16,12 @@ interface Operation {
 
 export default function Command() {
   const [showForm, setShowForm] = useState<string | null>(null);
-  const agent = new FuelAgent();
+  const preferences = getPreferenceValues();
+  const agent = new FuelAgent({
+    openAiApiKey: preferences.openaiApiKey,
+    walletPrivateKey: preferences.fuelWalletPrivateKey,
+    model: "gpt-4o-mini",
+  });
 
   const operations: Record<string, Operation> = {
     transfer: {
@@ -190,22 +201,25 @@ export default function Command() {
   };
 
   return (
-    <List>
-      {Object.entries(operations).map(([key, op]) => (
-        <List.Item
-          key={key}
-          title={op.title}
-          subtitle={op.description}
-          actions={
-            <ActionPanel>
-              <Action
-                title={`Open ${op.title} Form`}
-                onAction={() => setShowForm(key)}
-              />
-            </ActionPanel>
-          }
-        />
-      ))}
-    </List>
+    <>
+      {showForm ? (
+        operations[showForm].form()
+      ) : (
+        <List>
+          {Object.entries(operations).map(([key, op]) => (
+            <List.Item
+              key={key}
+              title={op.title}
+              subtitle={op.description}
+              actions={
+                <ActionPanel>
+                  <Action title={`Open ${op.title} Form`} onAction={() => setShowForm(key)} />
+                </ActionPanel>
+              }
+            />
+          ))}
+        </List>
+      )}
+    </>
   );
 }

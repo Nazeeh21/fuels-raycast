@@ -1,9 +1,10 @@
-import { Action, ActionPanel, Detail, Form, useNavigation } from "@raycast/api";
-import { usePromise } from "@raycast/utils";
-import { useRef, useState } from "react";
+import { Action, ActionPanel, Detail, Form, getPreferenceValues, useNavigation } from "@raycast/api";
+import dotenv from "dotenv";
+import fetch from "node-fetch";
+import { useState } from "react";
 import { getFuelUrl } from "./lib/utils";
 import { BALANCE_QUERY } from "./queries";
-import fetch from "node-fetch";
+dotenv.config();
 
 interface BalanceItem {
   amount: string;
@@ -15,13 +16,18 @@ export default function Command() {
   const [balance, setBalance] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const { pop } = useNavigation();
+  // const { data: envData } = useExec("./", ["options.env"]);
+  const preferences = getPreferenceValues();
+
 
   const baseAssetId = "0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07";
 
   const fetchBalance = async (address: string) => {
     try {
       setIsLoading(true);
-
+      // console.log("Environment: ", envData);
+      console.log('openaiKey: ',preferences.openaiApiKey);
+      console.log('fuelWalletPrivateKey: ',preferences.fuelWalletPrivateKey);
       const response = await fetch(getFuelUrl("testnet"), {
         method: "POST",
         headers: {
