@@ -2,6 +2,7 @@ import { ActionPanel, Action, List, Form, showToast, Toast, getPreferenceValues,
 import { FuelAgent } from "fuel-agent-kit";
 import { useState } from "react";
 import nodeFetch from 'node-fetch';
+import { Detail } from "@raycast/api";
 
 // Polyfill fetch
 if (!global.fetch) {
@@ -38,6 +39,7 @@ export default function Command() {
               <Action.SubmitForm
                 title="Execute Command"
                 onSubmit={async (values) => {
+                  setLoading(true);
                   const toast = await showToast(Toast.Style.Animated, "Executing Command...");
                   try {
                     const response = await agent.execute(values.command);
@@ -50,9 +52,6 @@ export default function Command() {
                     toast.style = Toast.Style.Success;
                     toast.title = "Command executed successfully!";
                     toast.message = `Transaction link: ${link}`;
-
-                    // Open the link in the user's browser
-                    // await open(link);
                   } catch (error) {
                     console.error("Command error:", error);
                     toast.style = Toast.Style.Failure;
@@ -164,6 +163,7 @@ export default function Command() {
               <Action.SubmitForm
                 title="Add Liquidity"
                 onSubmit={async (values) => {
+                  setLoading(true);
                   const toast = await showToast(Toast.Style.Animated, "Adding Liquidity...");
                   try {
                     const response = await agent.addLiquidity({
@@ -179,6 +179,8 @@ export default function Command() {
                     toast.style = Toast.Style.Failure;
                     toast.title = "Failed to add liquidity";
                     toast.message = String(error);
+                  } finally {
+                    setLoading(false);
                   }
                 }}
               />
@@ -201,6 +203,7 @@ export default function Command() {
               <Action.SubmitForm
                 title="Supply Collateral"
                 onSubmit={async (values) => {
+                  setLoading(true);
                   const toast = await showToast(Toast.Style.Animated, "Supplying Collateral...");
                   try {
                     const response = await agent.supplyCollateral({
@@ -215,6 +218,8 @@ export default function Command() {
                     toast.style = Toast.Style.Failure;
                     toast.title = "Failed to supply collateral";
                     toast.message = String(error);
+                  } finally {
+                    setLoading(false);
                   }
                 }}
               />
@@ -236,6 +241,7 @@ export default function Command() {
               <Action.SubmitForm
                 title="Borrow Asset"
                 onSubmit={async (values) => {
+                  setLoading(true);
                   const toast = await showToast(Toast.Style.Animated, "Borrowing Asset...");
                   try {
                     const response = await agent.borrowAsset({
@@ -249,6 +255,8 @@ export default function Command() {
                     toast.style = Toast.Style.Failure;
                     toast.title = "Failed to borrow asset";
                     toast.message = String(error);
+                  } finally {
+                    setLoading(false);
                   }
                 }}
               />
@@ -261,30 +269,57 @@ export default function Command() {
     },
   };
 
-  const handleExecuteCommand = async () => {
-    if (!commandInput) return;
-    setLoading(true);
-    const toast = await showToast(Toast.Style.Animated, "Executing Command...");
-    try {
-      const response = await agent.execute(commandInput);
-      console.log("Command response:", response);
+  // const handleExecuteCommand = async () => {
+  //   if (!commandInput) return;
+  //   setLoading(true);
+  //   const toast = await showToast(Toast.Style.Animated, "Executing Command...");
+  //   try {
+  //     const response = await agent.execute(commandInput);
+  //     console.log("Command response:", response);
 
-      // Extract the transaction link from the response
-      const link = response.output.match(/https?:\/\/[^\s]+/)[0];
-      setTransactionLink(link);
+  //     // Extract the transaction link from the response
+  //     const link = response.output.match(/https?:\/\/[^\s]+/)[0];
+  //     setTransactionLink(link);
 
-      toast.style = Toast.Style.Success;
-      toast.title = "Command executed successfully!";
-      toast.message = `Transaction link: ${link}`;
-    } catch (error) {
-      console.error("Command error:", error);
-      toast.style = Toast.Style.Failure;
-      toast.title = "Command execution failed";
-      toast.message = String(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //     toast.style = Toast.Style.Success;
+  //     toast.title = "Command executed successfully!";
+  //     toast.message = `Transaction link: ${link}`;
+  //   } catch (error) {
+  //     console.error("Command error:", error);
+  //     toast.style = Toast.Style.Failure;
+  //     toast.title = "Command execution failed";
+  //     toast.message = String(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
+
+  if(loading) {
+    return (
+      <Detail
+        markdown="# Executing command..."
+      />
+    );
+  }
+
+  if(transactionLink) {
+
+    const markdown = `
+# Transaction Executed Successfully!
+
+Click the link below to view the transaction on the Fuel Explorer.
+
+[Transaction Link](${transactionLink})
+`;
+    return (
+      <Detail
+      markdown={markdown}
+      navigationTitle="Transaction Link"
+    />
+
+    );
+  }
 
   return (
     <>
@@ -292,19 +327,6 @@ export default function Command() {
         operations[showForm].form()
       ) : (
         <List>
-          {/* <List.Item
-            title="Execute Natural Language Command"
-            subtitle="Enter a command in natural language"
-            actions={
-              <ActionPanel>
-                <Action
-                  title="Execute Command"
-                  onAction={handleExecuteCommand}
-                  disabled={loading || !commandInput}
-                />
-              </ActionPanel>
-            }
-          /> */}
           <Form.TextArea
             id="commandInput"
             title="Command"
