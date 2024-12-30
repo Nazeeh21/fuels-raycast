@@ -9,26 +9,8 @@
   "commands": [
     {
       "name": "fuel",
-      "title": "fuel",
-      "description": "",
-      "mode": "view"
-    },
-    {
-      "name": "balance",
-      "title": "Get Balance",
-      "description": "Get balance for a given address",
-      "mode": "view"
-    },
-    {
-      "name": "transactions",
-      "title": "Get Transactions",
-      "description": "Get transaction history for a given address",
-      "mode": "view"
-    },
-    {
-      "name": "ai-agent",
-      "title": "AI Agent",
-      "description": "AI Agent",
+      "title": "gFeul",
+      "description": "Fuel AI Agent",
       "mode": "view"
     }
   ],
@@ -39,7 +21,7 @@
     "@raycast/utils": "^1.17.0",
     "dotenv": "^16.4.7",
     "esbuild": "^0.24.2",
-    "fuel-agent-kit": "^0.9.0",
+    "fuel-agent-kit": "^0.11.1",
     "fuels": "0.97.2",
     "node-fetch": "^3.3.2"
   },

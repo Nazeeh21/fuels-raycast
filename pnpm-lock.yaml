@@ -20,8 +20,8 @@ dependencies:
     specifier: ^0.24.2
     version: 0.24.2
   fuel-agent-kit:
-    specifier: ^0.9.0
-    version: 0.9.0(axios@1.7.9)(fuels@0.97.2)
+    specifier: ^0.11.1
+    version: 0.11.1(axios@1.7.9)(fuels@0.97.2)
   fuels:
     specifier: 0.97.2
     version: 0.97.2(vitest@2.0.5)
@@ -6266,8 +6266,8 @@ packages:
     dev: false
     optional: true
 
-  /fuel-agent-kit@0.9.0(axios@1.7.9)(fuels@0.97.2):
-    resolution: {integrity: sha512-obvlu1UCvFE44+eNVOTGp8nm2oBl0oGO1tw+1EXZ7qp2fxdXJWu8mwmDwhJ6o6cQpE5Z6jhbw0C4oQDUwP2Tjw==}
+  /fuel-agent-kit@0.11.1(axios@1.7.9)(fuels@0.97.2):
+    resolution: {integrity: sha512-xP8pSe9jNUVvBPnL/e7hUnNAb6HXerUh4LUjjoPko0fEdVRtH2lrBzZIx8iMBdxtYTMxq68h692h9CLsK8jdvw==}
     peerDependencies:
       fuels: ^0.96.1
     dependencies:
