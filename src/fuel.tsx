@@ -4,9 +4,7 @@ import nodeFetch from "node-fetch";
 import { useState } from "react";
 
 // Polyfill fetch
-if (!global.fetch) {
-  (global as unknown as NodeJS.Global).fetch = nodeFetch;
-}
+(global as any).fetch = nodeFetch;
 
 export default function Command() {
   const [loading, setLoading] = useState<boolean>(false);
