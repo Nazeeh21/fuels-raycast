@@ -1,18 +1,11 @@
-import { ActionPanel, Action, List, Form, showToast, Toast, getPreferenceValues } from "@raycast/api";
+import { Action, ActionPanel, Detail, Form, getPreferenceValues, showToast, Toast } from "@raycast/api";
 import { FuelAgent } from "fuel-agent-kit";
-import { useState } from "react";
 import nodeFetch from "node-fetch";
-import { Detail } from "@raycast/api";
+import { useState } from "react";
 
 // Polyfill fetch
 if (!global.fetch) {
   (global as unknown as NodeJS.Global).fetch = nodeFetch;
-}
-
-interface Operation {
-  title: string;
-  description: string;
-  form: () => JSX.Element;
 }
 
 export default function Command() {
