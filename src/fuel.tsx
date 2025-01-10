@@ -1,12 +1,12 @@
-import { ActionPanel, Action, List, Form, showToast, Toast, getPreferenceValues, open } from "@raycast/api";
+import { ActionPanel, Action, List, Form, showToast, Toast, getPreferenceValues } from "@raycast/api";
 import { FuelAgent } from "fuel-agent-kit";
 import { useState } from "react";
-import nodeFetch from 'node-fetch';
+import nodeFetch from "node-fetch";
 import { Detail } from "@raycast/api";
 
 // Polyfill fetch
 if (!global.fetch) {
-  (global as unknown as any).fetch = nodeFetch;
+  (global as unknown as NodeJS.Global).fetch = nodeFetch;
 }
 
 interface Operation {
@@ -27,7 +27,7 @@ export default function Command() {
     walletPrivateKey: preferences.fuelWalletPrivateKey,
     model: "gpt-4o",
   });
-  
+
   const operations: Record<string, Operation> = {
     naturalLanguage: {
       title: "Execute Natural Language Command",
@@ -142,7 +142,6 @@ export default function Command() {
                   }
                 }}
                 disabled={loading}
-                
               />
             </ActionPanel>
           }
@@ -269,42 +268,11 @@ export default function Command() {
     },
   };
 
-  // const handleExecuteCommand = async () => {
-  //   if (!commandInput) return;
-  //   setLoading(true);
-  //   const toast = await showToast(Toast.Style.Animated, "Executing Command...");
-  //   try {
-  //     const response = await agent.execute(commandInput);
-  //     console.log("Command response:", response);
-
-  //     // Extract the transaction link from the response
-  //     const link = response.output.match(/https?:\/\/[^\s]+/)[0];
-  //     setTransactionLink(link);
-
-  //     toast.style = Toast.Style.Success;
-  //     toast.title = "Command executed successfully!";
-  //     toast.message = `Transaction link: ${link}`;
-  //   } catch (error) {
-  //     console.error("Command error:", error);
-  //     toast.style = Toast.Style.Failure;
-  //     toast.title = "Command execution failed";
-  //     toast.message = String(error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
-
-  if(loading) {
-    return (
-      <Detail
-        markdown="# Executing command..."
-      />
-    );
+  if (loading) {
+    return <Detail markdown="# Executing command..." />;
   }
 
-  if(transactionLink) {
-
+  if (transactionLink) {
     const markdown = `
 # Transaction Executed Successfully!
 
@@ -312,13 +280,7 @@ Click the link below to view the transaction on the Fuel Explorer.
 
 [Transaction Link](${transactionLink})
 `;
-    return (
-      <Detail
-      markdown={markdown}
-      navigationTitle="Transaction Link"
-    />
-
-    );
+    return <Detail markdown={markdown} navigationTitle="Transaction Link" />;
   }
 
   return (
