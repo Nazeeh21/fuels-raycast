@@ -1,5 +1,3 @@
-import * as dotenv from "dotenv";
-
 export const TESTNET_URL = "https://testnet.fuel.network/v1/graphql";
 export const MAINNET_URL = "https://mainnet.fuel.network/v1/graphql";
 
