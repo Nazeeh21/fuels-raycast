@@ -35,6 +35,7 @@ export default function Command() {
       // If the output text has a URL, show it in the success message
       const linkMatch = response.output.match(/https?:\/\/[^\s]+/);
       const link = linkMatch ? linkMatch[0] : null;
+      console.log(link);
 
       // Update toast to success
       toast.style = Toast.Style.Success;
