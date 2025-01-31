@@ -1,12 +1,4 @@
-import {
-  Action,
-  ActionPanel,
-  Form,
-  getPreferenceValues,
-  open,
-  showToast,
-  Toast,
-} from "@raycast/api";
+import { Action, ActionPanel, Form, getPreferenceValues, open, showToast, Toast } from "@raycast/api";
 import { FuelAgent } from "fuel-agent-kit";
 import fetch from "node-fetch";
 import { useState } from "react";
